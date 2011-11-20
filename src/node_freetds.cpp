@@ -185,24 +185,24 @@ namespace FreeTDS {
         for (pcol = columns; pcol - columns < ncols; pcol++) {
           int i = pcol - columns + 1;
           int binding = NTBSTRINGBIND;
-          switch(pcol->type){
-            case TINYBIND:
-            case SMALLBIND:
-            case INTBIND:
-            case FLT8BIND:
-            case REALBIND:
-            case SMALLDATETIMEBIND:
-            case MONEYBIND:
-            case SMALLMONEYBIND:
-            case BINARYBIND:
-            case BITBIND:
-            case NUMERICBIND:
-            case DECIMALBIND:
-            case BIGINTBIND:
-              // all numbers in JS are doubles
-              binding = REALBIND;
-              break;
-          }
+          // switch(pcol->type){
+          //   case TINYBIND:
+          //   case SMALLBIND:
+          //   case INTBIND:
+          //   case FLT8BIND:
+          //   case REALBIND:
+          //   case SMALLDATETIMEBIND:
+          //   case MONEYBIND:
+          //   case SMALLMONEYBIND:
+          //   case BINARYBIND:
+          //   case BITBIND:
+          //   case NUMERICBIND:
+          //   case DECIMALBIND:
+          //   case BIGINTBIND:
+          //     // all numbers in JS are doubles
+          //     binding = REALBIND;
+          //     break;
+          // }
           if(dbbind(callbackData->dbconn, i, binding,  pcol->size + 1, (BYTE*)pcol->buffer) == FAIL){
             err = true;
           }else if(dbnullbind(callbackData->dbconn, i, &pcol->status) == FAIL){
@@ -229,36 +229,63 @@ namespace FreeTDS {
                 continue;
               }
               switch(pcol->type){
-                case CHARBIND:
-                case STRINGBIND:
-                case NTBSTRINGBIND:
-                case VARYCHARBIND:
-                case VARYBINBIND:
+                case SQLINTN:
+                case SQLINT1:
+                case SQLINT2:
+                case SQLINT4:
+                case SQLINT8:
+                case SQLFLT8:
+                case SQLDATETIME:
+                case SQLDATETIM4:
+                case SQLBIT:
+                case SQLFLT4:
+                case SQLNUMERIC:
+                case SQLDECIMAL:
+                case SQLFLTN:
+                case SQLDATETIMN:
+                case 36:
+                case SQLCHAR:
+                case SQLVARCHAR:
+                case SQLTEXT:
                   tuple->Set(pcol->name, v8::String::New((char*) pcol->buffer));
                   break;
-                case TINYBIND:
-                case SMALLBIND:
-                case INTBIND:
-                case FLT8BIND:
-                case REALBIND:
-                case DATETIMEBIND:
-                case SMALLDATETIMEBIND:
-                case MONEYBIND:
-                case SMALLMONEYBIND:
-                case BINARYBIND:
-                case BITBIND:
-                case NUMERICBIND:
-                case DECIMALBIND:
-                case BIGINTBIND:
-                  DBREAL val;
-                  memcpy(&val, pcol->buffer, pcol->size);
-                  tuple->Set(pcol->name, v8::Number::New((double)val));
+                // case SQLINTN:
+                // case SQLINT1:
+                // case SQLINT2:
+                // case SQLINT4:
+                // case SQLINT8:
+                // case SQLFLT8:
+                // case SQLDATETIME:
+                // case SQLDATETIM4:
+                // case SQLBIT:
+                // case SQLFLT4:
+                // case SQLNUMERIC:
+                // case SQLDECIMAL:
+                // case SQLFLTN:
+                // case SQLDATETIMN:
+                  // DBREAL val;
+                  // memcpy(&val, pcol->buffer, pcol->size);
+                  // tuple->Set(pcol->name, v8::Number::New((double)val));
+                  break;
+                case SQLIMAGE:
+                case SQLMONEY4:
+                case SQLMONEY:
+                case SQLBINARY:
+                case SQLVARBINARY:
+                case SQLMONEYN:
+                case SQLVOID:
+                default:
+                  printf("unsupported col type %d\n", pcol->type);
                   break;
               }
             }
             results->Set(rownum++, tuple);
           }
         }
+        for (pcol = columns; pcol - columns < ncols; pcol++) {
+          free(pcol->buffer);
+        }
+        free(columns);
       }
 
       v8::Local<v8::Value> argv[2] = { Local<Value>::New(Null()), results };
@@ -267,10 +294,6 @@ namespace FreeTDS {
       callbackData->callback.Dispose();
       delete callbackData;
 
-      for (pcol = columns; pcol - columns < ncols; pcol++) {
-        free(pcol->buffer);
-        free(columns);
-      }
 
       return 0;
     }
