@@ -13,6 +13,7 @@
 #include <node.h>
 #include <sqldb.h>
 #include <sybdb.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -59,6 +60,7 @@ namespace FreeTDS {
       return v8::String::New(rcsid_sqldb_h);
     }
 
+    // TODO Rewrite login so that it does not use an object for a parameter. +callback?
     // assumes {userId: 'user name', password: 'password', server: 'server', database: 'database' }
     // returns a database reference
     static v8::Handle<Value> Login(const Arguments& args) {
@@ -70,7 +72,7 @@ namespace FreeTDS {
 
       /* Allocate a login params structure */
       if ((login = dblogin()) == FAIL) {
-        return v8::ThrowException(v8::Exception::Error(v8::String::New("FreeTDS cannot initialise dblogin() structure.")));
+        return v8::ThrowException(v8::Exception::Error(v8::String::New("FreeTDS cannot initialize dblogin() structure.")));
       }
 
       // fill out the login params
@@ -99,7 +101,7 @@ namespace FreeTDS {
       /* Now connect to the DB Server */
       if ((dbconn = dbopen(login, *serverName)) == NULL) {
         dbloginfree(login);
-        return v8::ThrowException(v8::Exception::Error(v8::String::New("FreeTDS cannot initialise dblogin() structure.")));
+        return v8::ThrowException(v8::Exception::Error(v8::String::New("FreeTDS cannot initialize dblogin() structure.")));
       }
 
       v8::Local<v8::String> dbKey = v8::String::New("database");
@@ -128,6 +130,8 @@ namespace FreeTDS {
       return v8::Undefined();
     }
 
+    // TODO Logout and Cleanup should happen when the object is freed and probably should not be exposed to Javascript.
+    // TODO Calling dbexit here will be really confusing to freetds if it is called out of order when there is more than one dbinit or instance of FreeTDS.
     static v8::Handle<Value> Cleanup(const Arguments& args) {
       v8::HandleScope scope;
       dbexit();
@@ -143,9 +147,10 @@ namespace FreeTDS {
     static int onDataResponse(eio_req *req) {
       v8::HandleScope scope;
       data_callback_t *callbackData = (data_callback_t *) req->data;
+
       if(req->result == FAIL){
         Local<Value> argv[1];
-        argv[0] = v8::Exception::Error(v8::String::New("An error occured executing that statement"));
+        argv[0] = v8::Exception::Error(v8::String::New("An error occurred executing that statement"));
         callbackData->callback->Call(Context::GetCurrent()->Global(), 1, argv);
       }
 
@@ -154,6 +159,7 @@ namespace FreeTDS {
       COL *columns, *pcol;
       int ncols = 0;
       v8::Local<v8::Array> results = v8::Array::New();
+
       while(dbresults(callbackData->dbconn) != NO_MORE_RESULTS){
         ncols = dbnumcols(callbackData->dbconn);
         columns = (COL *) calloc(ncols, sizeof(struct COL));
@@ -220,6 +226,7 @@ namespace FreeTDS {
           return 0;
         }
         int row_code;
+
         while ((row_code = dbnextrow(callbackData->dbconn)) != NO_MORE_ROWS){ 
           if(row_code == REG_ROW) {
             v8::Local<v8::Object> tuple = v8::Object::New();
@@ -331,7 +338,8 @@ void init( Handle<Object> target ) {
   
   // start up db-lib
   if(dbinit() == FAIL){
-    v8::ThrowException(v8::Exception::Error(v8::String::New("FreeTDS cannot allocate an socket pointers")));
+	  // TODO Not sure that this best describes the error.  Will work out later.
+    v8::ThrowException(v8::Exception::Error(v8::String::New("FreeTDS cannot allocate a socket pointer for freetds database.")));
     return;
   }
 
