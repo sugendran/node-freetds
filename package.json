@@ -1,10 +1,13 @@
 {
 	"name": "node-freetds",
-	"description": "FreeTDS Driver for Node.js for Sybase/MS SQL Server",
+	"description": "FreeTDS Driver for Node.js for Sybase, Azure, and other MS SQL Servers",
 	"author": "Nathaniel Sigrist",
 	"contributors": ["Nathaniel \"Gnate\" Sigrist <sigrist.nathaniel@gmail.com>", "Sugendran Ganess"],
 	"version": "0.2.0",
-	"keywords": ["azure", "sql", "database", "mssql", "driver", "ms", "sybase", "sqlserver", "tds", "freetds"],
+	"keywords": [
+		"azure", "Microsoft", "sql", "database", "mssql", "driver", "sybase",
+		"sqlserver", "tds", "freetds"
+	],
 	"homepage": "https://github.com/Gnate/node-freetds",
 	"bugs": "https://github.com/Gnate/node-freetds",
 	"licenses": [ {

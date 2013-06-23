@@ -7,7 +7,15 @@
 			"conditions": [ [
 				'OS=="linux"', {
 					"libraries": [
+						"$(shell find /usr/lib -type l -name 'libv8.so')",
 						"$(shell find /usr/lib -type l -name 'libsybdb.so')"
+					],
+					"headers": [
+						"$(shell find /usr/include -type f -name 'v8.h')",
+						"$(shell find /usr/include -type f -name 'node.h')",
+						"$(shell find /usr/include -type f -name 'uv.h')",
+						"$(shell find /usr/include -type f -name 'sqldb.h')",
+						"$(shell find /usr/include -type f -name 'sybdb.h')"
 					]
 				}]
 			],
@@ -19,6 +27,7 @@
 			],
 			"ldflags": [
 				"-lpthread",
+				"-lv8",
 				"-lsybdb"
 			]
 		}
