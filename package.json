@@ -4,7 +4,7 @@
 	"author": "Nathaniel Sigrist",
 	"contributors": ["Nathaniel \"Gnate\" Sigrist <sigrist.nathaniel@gmail.com>", "Sugendran Ganess"],
 	"version": "0.2.0",
-	"keywords": ["sql", "database", "mssql", "driver", "ms", "sybase", "sqlserver", "tds", "freetds"],
+	"keywords": ["azure", "sql", "database", "mssql", "driver", "ms", "sybase", "sqlserver", "tds", "freetds"],
 	"homepage": "https://github.com/Gnate/node-freetds",
 	"bugs": "https://github.com/Gnate/node-freetds",
 	"licenses": [ {

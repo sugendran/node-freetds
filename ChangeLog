@@ -1,0 +1,15 @@
+
+2013/06/23
+
+	Significant changes were made v0.1.0.
+
+	* Updated for node.js 0.11.x
+	* Implemented libuv for asynchonous tasks
+	* Added header file to attempt to be more like node.js programming structure
+	* Objects wrapped using node::ObjectWrap
+	
+	Known issues ( _This is beta_ ):
+	
+	* Memory leaks
+	* No way to select database version (default is 8.0)
+	* No easy way to compile for Windows
