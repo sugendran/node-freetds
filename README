@@ -1,13 +1,1 @@
-FreeTDS driver for node.js
-==========================
-
-
-Requirements
-------------
-
-This driver assumes that you have the freetds libraries installed. For more info check out: http://www.freetds.org/
-
-For those of you with homebrew installed you can just do the following:
-
-	brew install freetds
-
+README.md

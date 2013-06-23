@@ -1,6 +1,12 @@
 .DS_Store
+
+.cproject
+.project
+
 .lock-wscript
+
 build/*
+
 freetds.node
 gmon.out
 test.js
