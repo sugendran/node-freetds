@@ -100,7 +100,7 @@ library.
 You will have issues running your NodeJS script if it is not installed.
 Install it by with ``apt``:
 
-	apt-get install freetds-dev libsybdb5
+	apt-get install freetds-dev libsybdb5 libv8-dev nodejs-dev
 
 Copyright
 ---------
