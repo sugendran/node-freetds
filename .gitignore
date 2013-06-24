@@ -6,6 +6,7 @@
 .lock-wscript
 
 build/*
+freetds-*/
 
 freetds.node
 gmon.out

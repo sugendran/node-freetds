@@ -17,7 +17,13 @@
 						"$(shell find /usr/include -type f -name 'sqldb.h')",
 						"$(shell find /usr/include -type f -name 'sybdb.h')"
 					]
-				}]
+				}], [
+				'OS=="win"', {
+					"include_dirs": [
+						"-L.//include",
+						"-L./node/src"
+					]
+				}
 			],
 			"cflags": [
 				"-g",
