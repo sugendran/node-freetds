@@ -23,7 +23,7 @@
 						"-L.//include",
 						"-L./node/src"
 					]
-				}
+				}]
 			],
 			"cflags": [
 				"-g",
