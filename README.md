@@ -14,7 +14,7 @@ Example Code
 
 	var sql = require('node-freetds');
 	
-	var azure = sql.FreeTDS("abcd1234.database.windows.net:1433", "MyDatabase");
+	var azure = new sql.FreeTDS("abcd1234.database.windows.net:1433", "MyDatabase");
 
 	azure.login("username@abcd1234", "horsebatterystaplecorrect");
 	azure.executeSql("SELECT * FROM sys.Tables", 
